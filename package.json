@@ -7,11 +7,13 @@
     "node": ">= 20.9 < 21"
   },
   "devDependencies": {
+    "@types/ejs": "^3.1.5",
     "@types/express": "^4.17.21",
     "@types/jest": "~29.5",
     "@types/node": "~20",
     "@typescript-eslint/eslint-plugin": "~7.6",
     "@typescript-eslint/parser": "~7.6",
+    "copyfiles": "^2.4.1",
     "eslint": "~8.56",
     "eslint-config-prettier": "~9.1",
     "eslint-plugin-jest": "~28.2",
@@ -26,22 +28,34 @@
     "start": "node build/src/main.js",
     "clean": "rimraf coverage build tmp",
     "prebuild": "npm run lint",
+    "copy-views": "copyfiles -u 1 src/views/**/* build/src/",
     "build": "tsc -p tsconfig.json",
-    "build:watch": "tsc -w -p tsconfig.json",
+    "build:watch": "tsc -w -p tsconfig.json & npm run copy-views & npm run tailwind:css",
     "build:release": "npm run clean && tsc -p tsconfig.release.json",
     "lint": "eslint . --ext .ts --ext .mts",
     "test": "jest --coverage",
     "prettier": "prettier --config .prettierrc --write .",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "dev": "concurrently \"npm run tailwind:css\" \"npm run build:watch\" \"nodemon --watch build --delay 1 build/src/main.js\"",
+    "tailwind:css": "npx tailwindcss -i ./src/styles/tailwind.css -o ./public/styles/tailwind.css --watch"
   },
   "author": "Ayberk Tandogan <ayberktandogan@users.noreply.github.com>",
   "dependencies": {
+    "@tailwindcss/typography": "^0.5.14",
+    "autoprefixer": "^10.4.20",
+    "concurrently": "^8.2.2",
     "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
     "express": "^4.19.2",
+    "http-status-codes": "^2.3.0",
     "node-typescript-boilerplate": "file:",
+    "postcss": "^8.4.41",
+    "postcss-cli": "^11.0.0",
     "query-string": "^9.1.0",
     "spotify-with-musixmatch-lyrics-layer-for-obs": "file:",
-    "tslib": "~2.6"
+    "tailwindcss": "^3.4.10",
+    "tslib": "~2.6",
+    "uuid": "^10.0.0"
   },
   "volta": {
     "node": "20.12.2"

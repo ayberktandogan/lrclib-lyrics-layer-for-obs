@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/styles/tailwind.css" rel="stylesheet">
+</head>
+<body>
+    <div class="relative flex min-h-screen flex-col justify-center overflow-hidden bg-gray-50">
+        <div class="relative overflow-hidden bg-black/50 backdrop-blur-md backdrop-opacity-100 shadow-xl ring-1 ring-gray-900/5 sm:mx-auto sm:min-w-72 sm:max-w-lg sm:rounded-lg lg:max-w-2xl lg:min-w-96">
+            <div class="mx-auto">
+                <% if (song) { %>
+                    <div class="flex items-center gap-4 text-gray-100">
+                        <img src="<%= song.item.album.images[0].url %>" class="h-36" alt="Tailwind Play" />
+                        <div class="min-w-0">
+                            <h1 class="text-2xl"><%= song.item.name %></h1>
+                            <h2 class="text-lg truncate"><%= song.item.artists[0].name %></h2>
+                        </div>
+                      </div>
+                    <% } %>
+            </div>
+          </div>
+
+        <% if (lyrics) { %>
+            <h3 class="whitespace-break-spaces"><%= lyrics.syncedLyrics %></h3>
+        <% } %>
+    </div>
+
+</body>
+</html>
+
+
+
