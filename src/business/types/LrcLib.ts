@@ -8,4 +8,5 @@ export type LrcLyrics = {
   instrumental: boolean;
   plainLyrics: string;
   syncedLyrics: string;
+  parsedLyrics?: { timestamp: number; line: string }[];
 };

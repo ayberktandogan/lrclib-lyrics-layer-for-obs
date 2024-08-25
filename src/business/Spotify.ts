@@ -10,7 +10,8 @@ const app = express();
 
 class Spotify {
   static #instance: Spotify;
-  static #currentlyPlaying: SpotifyCurrentlyPlaying;
+  static #currentlyPlaying: SpotifyCurrentlyPlaying =
+    {} as SpotifyCurrentlyPlaying;
 
   private clientId: string = process.env.SPOTIFY_CLIENT_ID;
   private clientSecret: string = process.env.SPOTIFY_CLIENT_SECRET;

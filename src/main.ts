@@ -2,11 +2,6 @@ import LrcLib from './business/LrcLib.js';
 import Spotify from './business/Spotify.js';
 import dotenv from 'dotenv';
 import express from 'express';
-import path from 'path';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 dotenv.config();
 
@@ -21,8 +16,7 @@ async function waitForCondition(): Promise<void> {
     conditionMet = await Spotify.instance.isTokenSet();
 
     if (!conditionMet) {
-      console.log('Condition not met, checking again in 1 second...');
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // Wait for 1 second
+      await new Promise((resolve) => setTimeout(resolve, 500));
     }
   }
 
@@ -31,20 +25,12 @@ async function waitForCondition(): Promise<void> {
 
 await waitForCondition();
 
-// Set the views directory (use relative path from compiled JS)
-app.set('views', path.join(__dirname, '..', 'src', 'views'));
+app.get('/song', (req, res) => {
+  res.status(200).json(Spotify.currentlyPlaying);
+});
 
-// Set the view engine to EJS
-app.set('view engine', 'ejs');
-
-app.use(express.static('public'));
-
-// Example route
-app.get('/', (req, res) => {
-  res.render('index', {
-    lyrics: LrcLib.currentlyPlaying,
-    song: Spotify.currentlyPlaying,
-  }); // 'template' refers to 'template.ejs'
+app.get('/lyrics', (req, res) => {
+  res.status(200).json(LrcLib.currentlyPlaying);
 });
 
 // Start the server
@@ -60,14 +46,10 @@ while (true) {
   if (lastWantedSongId === currentlyPlaying?.item?.id) {
     // do nothing
   } else if (currentlyPlaying.device) {
-    const lyrics = await LrcLib.instance.getLyrics(
-      currentlyPlaying?.item?.name,
-    );
-
-    console.log(lyrics.syncedLyrics);
+    await LrcLib.instance.getLyrics(currentlyPlaying?.item?.name);
   }
 
-  lastWantedSongId = currentlyPlaying.item.id;
+  lastWantedSongId = currentlyPlaying?.item?.id;
 
-  await new Promise((resolve) => setTimeout(resolve, 2000)); // Wait for 1 second
+  await new Promise((resolve) => setTimeout(resolve, 2000));
 }
