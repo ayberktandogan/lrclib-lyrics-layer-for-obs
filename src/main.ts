@@ -46,7 +46,9 @@ while (true) {
   if (lastWantedSongId === currentlyPlaying?.item?.id) {
     // do nothing
   } else if (currentlyPlaying.device) {
-    await LrcLib.instance.getLyrics(currentlyPlaying?.item?.name);
+    await LrcLib.instance.getLyrics(
+      `${currentlyPlaying?.item?.name} ${currentlyPlaying?.item.artists[0].name}`,
+    );
   }
 
   lastWantedSongId = currentlyPlaying?.item?.id;

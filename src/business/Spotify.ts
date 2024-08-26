@@ -44,6 +44,7 @@ class Spotify {
       const body = (await response.json()) as SpotifyCurrentlyPlaying;
 
       Spotify.#currentlyPlaying = body;
+      console.log(body);
 
       return body;
     }
